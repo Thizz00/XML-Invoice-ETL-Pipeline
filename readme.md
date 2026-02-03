@@ -6,11 +6,11 @@ Scalable Data Pipeline designed to validate, process, and load XML invoices into
 ### Architecture
 The system follows a decoupled architecture orchestrated by Airflow:
 
-Validation (Airflow/LXML): Pre-screens XML files against XSD schema.
+- Validation (Airflow/LXML): Pre-screens XML files against XSD schema.
 
-Processing (PySpark): A containerized Spark job parses valid XMLs, performs transformations, and handles schema mapping.
+- Processing (PySpark): A containerized Spark job parses valid XMLs, performs transformations, and handles schema mapping.
 
-Storage (PostgreSQL): Final data is stored using an idempotent Upsert logic (Atomic Transactions).
+- Storage (PostgreSQL): Final data is stored using an idempotent Upsert logic (Atomic Transactions).
 
 ### Quick Start
 Build & Launch:
