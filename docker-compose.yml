@@ -1,0 +1,50 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: postgres_db
+    networks:
+      etl:
+        aliases:
+          - postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: erp_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  airflow:
+    image: apache/airflow:2.7.1-python3.11
+    container_name: airflow_scheduler
+    networks:
+      - etl
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://user:password@postgres:5432/erp_db
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - AIRFLOW_UID=50000
+      - _PIP_ADDITIONAL_DEPENDENCIES=lxml
+      - AIRFLOW__CORE__PARALLELISM=8
+      - AIRFLOW__CORE__MAX_ACTIVE_TASKS_PER_DAG=8
+      - PROJECT_ROOT=C:/Users/Thizz/Desktop/ETL
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./data:/opt/spark/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    user: "50000:0"
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    command: standalone
+
+  spark-job:
+    build: .
+    image: spark-job:latest
+
+networks:
+  etl:
+    driver: bridge
+    name: etl

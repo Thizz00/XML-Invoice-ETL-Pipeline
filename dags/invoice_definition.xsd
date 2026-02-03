@@ -1,0 +1,57 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="Invoice">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element type="xs:string" name="InvoiceNumber"/>
+        <xs:element type="xs:string" name="InvoiceType"/>
+        <xs:element type="xs:date" name="IssueDate"/>
+        <xs:element type="xs:date" name="DueDate"/>
+        <xs:element type="xs:string" name="Currency"/>
+        <xs:element name="Vendor" type="PartyType"/>
+        <xs:element name="Buyer" type="PartyType"/>
+        <xs:element name="Items">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Item" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element type="xs:string" name="Description"/>
+                    <xs:element type="xs:integer" name="Quantity"/>
+                    <xs:element type="xs:decimal" name="UnitPrice"/>
+                    <xs:element type="xs:integer" name="VAT"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Totals">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element type="xs:decimal" name="Net"/>
+              <xs:element type="xs:decimal" name="VAT"/>
+              <xs:element type="xs:decimal" name="Gross"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name="PartyType">
+    <xs:sequence>
+      <xs:element type="xs:string" name="Name"/>
+      <xs:element type="xs:string" name="TaxID"/>
+      <xs:element name="Address">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element type="xs:string" name="Street"/>
+            <xs:element type="xs:string" name="City"/>
+            <xs:element type="xs:string" name="Zip"/>
+            <xs:element type="xs:string" name="Country"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
